@@ -3,6 +3,8 @@ package com.shopdata.parsing.controller;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class ParsingController {
 
   @CrossOrigin("*")
@@ -24,12 +27,16 @@ public class ParsingController {
     String strOfRateHtml = document.getElementsByClass("top_grade__3jjdl").get(0).text();
     double starRate = Double.parseDouble(strOfRateHtml.replaceFirst("평점",""));
     String imgUrl = document.select("meta[property^=og:image]").get(0).attr("content");
+    String description = document.select("meta[property^=og:description]").get(0).attr("content");
 
     Map<String, Object> shopData = new HashMap<>();
     shopData.put("shopName",shopName);
     shopData.put("lowestPrice", lowestPrice);
     shopData.put("starRate", starRate);
     shopData.put("imgUrl", imgUrl);
+    shopData.put("description", description);
+
+    log.info(shopData.toString());
 
     return shopData;
   }
