@@ -32,7 +32,21 @@ deploy: # (5)
     bucket: javas-webservice-deploy # S3 버킷
     region: ap-northeast-2
     skip_cleanup: true
-    acl: private # zip 파일 접근을 private으로
+    acl: public_read
+    local_dir: deploy
+    wait-until-deployed: true
+    on:
+      repo: boxak/parsing
+      branch: master
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: javas-webservice-deploy
+    key: springboot-webservice.zip
+    bundle_type: zip
+    application: javas-webservice
+    deployment_group: javas-webservice-group
+    region: ap-northeast-2
     wait-until-deployed: true
     on:
       repo: boxak/parsing
